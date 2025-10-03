@@ -69,10 +69,10 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } },
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { id } = context.params
+    const { id } = await context.params
     const { name, description, ingredients }: DrinkInput = await req.json()
 
     // Atualiza drink
