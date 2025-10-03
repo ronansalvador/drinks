@@ -2,13 +2,19 @@ import { useForm, Controller } from 'react-hook-form'
 import Select from 'react-select'
 import { Product } from '../types'
 
+interface DrinkFormValues {
+  name: string
+  description: string
+  ingredients: { value: string; label: string }[]
+}
+
 interface DrinkFormProps {
   products: Product[]
-  onSubmit: (data: any) => void
+  onSubmit: (data: DrinkFormValues) => void
 }
 
 export function DrinkForm({ products, onSubmit }: DrinkFormProps) {
-  const { handleSubmit, register, control } = useForm()
+  const { handleSubmit, register, control } = useForm<DrinkFormValues>()
 
   const options = products.map((p) => ({ value: p.id, label: p.name }))
 
