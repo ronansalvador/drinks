@@ -4,17 +4,49 @@ import { DrinkIngredient } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
 // GET - lista todos os drinks
+// GET - lista todos os drinks com custo
 export async function GET() {
   try {
     const drinks = await prisma.drink.findMany({
       include: {
         ingredients: {
-          include: { product: true }, // já traz os produtos relacionados
+          include: { product: true }, // traz produtos relacionados
         },
       },
     })
-    return NextResponse.json(drinks)
+
+    // Calcula custo de cada drink
+    const drinksWithCost = drinks.map((drink) => {
+      const ingredientesCalculados = drink.ingredients.map((ing) => {
+        const { product, volumeMl } = ing
+        if (!product) throw new Error('Ingrediente sem produto relacionado')
+
+        const custo = (product.price / product.volumeMl) * volumeMl
+
+        return {
+          ingrediente: product.name,
+          quantidade: `${volumeMl}${product.unit}`,
+          custo: Number(custo.toFixed(2)),
+        }
+      })
+
+      const custoTotal = ingredientesCalculados.reduce(
+        (acc, cur) => acc + cur.custo,
+        0,
+      )
+
+      return {
+        id: drink.id,
+        name: drink.name,
+        description: drink.description,
+        ingredientes: ingredientesCalculados,
+        custoTotal: Number(custoTotal.toFixed(2)),
+      }
+    })
+
+    return NextResponse.json(drinksWithCost)
   } catch (error) {
+    console.error('Erro ao buscar drinks:', error)
     return NextResponse.json(
       { message: 'Erro ao buscar drinks', error },
       { status: 500 },

@@ -1,24 +1,29 @@
-import { Drink } from '../types'
+import { DrinkWithCost } from '../types'
 
 interface DrinkListProps {
-  drinks: Drink[]
+  drinks: DrinkWithCost[]
 }
 
 export function DrinkList({ drinks }: DrinkListProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {drinks.map((d) => (
-        <div key={d.id} className="p-4 bg-white shadow rounded-lg">
+        <div
+          key={d.id}
+          className="p-4 bg-white shadow rounded-lg hover:shadow-md transition"
+        >
           <h2 className="font-bold text-lg">{d.name}</h2>
           <p className="text-gray-500">{d.description}</p>
           <ul className="mt-2">
-            {d.ingredients.map((i) => (
-              <li key={i.id}>
-                {i.product?.name}: {i.volumeMl}
-                {i.product?.unit}
+            {d.ingredientes.map((i) => (
+              <li key={i.ingrediente}>
+                {i.ingrediente}: {i.quantidade} - R$ {i.custo.toFixed(2)}
               </li>
             ))}
           </ul>
+          <h3 className="mt-2 font-semibold">
+            Custo total: R$ {d.custoTotal.toFixed(2)}
+          </h3>
         </div>
       ))}
     </div>

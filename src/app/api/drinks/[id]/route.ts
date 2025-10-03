@@ -1,4 +1,4 @@
-import { DrinkCostIngredient, DrinkCostResult } from '@/app/types'
+import { DrinkCostIngredient, DrinkCostResult, DrinkInput } from '@/app/types'
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -62,6 +62,65 @@ export async function GET(
     console.error('Erro ao calcular custo:', error)
     return NextResponse.json(
       { message: 'Erro ao calcular custo', error },
+      { status: 500 },
+    )
+  }
+}
+
+export async function PUT(
+  req: NextRequest,
+  context: { params: { id: string } },
+) {
+  try {
+    const { id } = context.params
+    const { name, description, ingredients }: DrinkInput = await req.json()
+
+    // Atualiza drink
+    const drink = await prisma.drink.update({
+      where: { id },
+      data: {
+        name,
+        description,
+      },
+    })
+
+    // Remove os ingredientes antigos que não estão mais na lista
+    const ingredientIds = ingredients.filter((i) => i.id).map((i) => i.id!)
+    await prisma.drinkIngredient.deleteMany({
+      where: {
+        drinkId: id,
+        id: { notIn: ingredientIds }, // exclui os que não estão na lista
+      },
+    })
+
+    // Atualiza ou cria os ingredientes
+    for (const ing of ingredients) {
+      if (ing.id) {
+        // Atualiza ingrediente existente
+        await prisma.drinkIngredient.update({
+          where: { id: ing.id },
+          data: {
+            productId: ing.productId,
+            volumeMl: ing.volumeMl,
+          },
+        })
+      } else {
+        // Cria ingrediente novo
+        await prisma.drinkIngredient.create({
+          data: {
+            drinkId: id,
+            productId: ing.productId,
+            volumeMl: ing.volumeMl,
+          },
+        })
+      }
+    }
+
+    return NextResponse.json({ message: 'Drink atualizado com sucesso', drink })
+  } catch (error) {
+    console.error('Erro ao atualizar drink:', error)
+    return NextResponse.json(
+      { message: 'Erro ao atualizar drink', error },
       { status: 500 },
     )
   }

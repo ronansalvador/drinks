@@ -62,3 +62,11 @@ export interface DrinkInput {
   description?: string
   ingredients: DrinkIngredientInput[]
 }
+
+export interface DrinkWithCost {
+  id: string
+  name: string
+  description?: string
+  ingredientes: DrinkCostIngredient[]
+  custoTotal: number
+}
