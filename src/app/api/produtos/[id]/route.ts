@@ -4,10 +4,10 @@ import { NextResponse, NextRequest } from 'next/server'
 // PUT - atualiza um produto usando o id da rota
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } }, // pega id da rota /produtos/:id
+  context: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { id } = context.params
+    const { id } = await context.params
     const { name, volumeMl, price, unit } = await req.json()
 
     const product = await prisma.product.update({
