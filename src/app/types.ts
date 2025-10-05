@@ -45,7 +45,7 @@ export interface DrinkCostIngredient {
 }
 
 export interface DrinkCostResult {
-  drink: string
+  name: string
   ingredientes: DrinkCostIngredient[]
   custoTotal: number
 }

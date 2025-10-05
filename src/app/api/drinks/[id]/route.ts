@@ -52,7 +52,7 @@ export async function GET(
     )
 
     const resultado: DrinkCostResult = {
-      drink: drink.name,
+      name: drink.name,
       ingredientes: ingredientesCalculados,
       custoTotal: Number(custoTotal.toFixed(2)),
     }
