@@ -53,8 +53,8 @@ interface ProductListProps {
 export function ProductList({ products, onDelete, onEdit }: ProductListProps) {
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white shadow rounded-lg overflow-hidden">
-        <thead className="bg-gray-100">
+      <table className="min-w-full shadow rounded-lg overflow-hidden">
+        <thead className="bg-gray-600">
           <tr>
             <th className="text-left px-4 py-2">Nome</th>
             <th className="text-left px-4 py-2">Volume</th>
@@ -73,13 +73,13 @@ export function ProductList({ products, onDelete, onEdit }: ProductListProps) {
               <td className="px-4 py-2">R${p.price.toFixed(2)}</td>
               <td className="px-4 py-2 space-x-2">
                 <button
-                  className="text-blue-500 hover:underline"
+                  className="text-white bg-blue-500 rounded p-1 hover:bg-blue-900 cursor-pointer"
                   onClick={() => onEdit(p)} // 🟢 chama função de edição
                 >
                   Editar
                 </button>
                 <button
-                  className="text-red-500 hover:underline"
+                  className="text-white bg-red-500 rounded p-1 hover:bg-red-900 cursor-pointer"
                   onClick={() => onDelete(p.id)}
                 >
                   Excluir

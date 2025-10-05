@@ -58,7 +58,7 @@ export default function ProductCreatePage() {
       >
         <option value="ml">ml</option>
         <option value="g">g</option>
-        <option value="each">unidade</option>
+        <option value="un">unidade</option>
       </select>
       <button
         onClick={handleSave}

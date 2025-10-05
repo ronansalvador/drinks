@@ -34,7 +34,7 @@ export default function DrinkEditPage() {
         ])
 
         const drink: DrinkWithCost = drinkRes.data
-        setName(drink.name)
+        setName(drink.drink)
         setDescription(drink.description || '')
 
         setProducts(productsRes.data)

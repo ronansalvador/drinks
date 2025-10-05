@@ -81,7 +81,7 @@ export default function ProductsPage() {
 
       {/* Formulário inline de edição */}
       {editingProduct && (
-        <div className="mt-4 p-4 border rounded bg-gray-50">
+        <div className="mt-4 p-4 border rounded">
           <h2 className="text-xl font-semibold mb-2">
             Editando: {editingProduct.name}
           </h2>
